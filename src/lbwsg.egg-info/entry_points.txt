@@ -1,0 +1,4 @@
+
+            [console_scripts]
+            get_draws=lbwsg.cli:get_draws
+        

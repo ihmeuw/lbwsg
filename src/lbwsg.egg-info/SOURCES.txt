@@ -1,0 +1,10 @@
+setup.py
+src/lbwsg/__init__.py
+src/lbwsg/cli.py
+src/lbwsg.egg-info/PKG-INFO
+src/lbwsg.egg-info/SOURCES.txt
+src/lbwsg.egg-info/dependency_links.txt
+src/lbwsg.egg-info/entry_points.txt
+src/lbwsg.egg-info/not-zip-safe
+src/lbwsg.egg-info/requires.txt
+src/lbwsg.egg-info/top_level.txt
