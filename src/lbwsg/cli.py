@@ -23,7 +23,8 @@ GBD_MODEL_RESULTS_LOCATION_SET_ID = 35
               type=click.Choice(['exposure', 'relative_risk', 'population_attributable_fraction']))
 @click.option('-l', '--location', type=click.STRING)
 def make_lbwsg_pickle(output_dir: str, measure: str, location: str):
-    output_path = Path(output_dir).resolve() / f'{location}_{measure}.pickle'
+    sanitized_location = sanitize_location(location)
+    output_path = Path(output_dir).resolve() / f'{sanitized_location}_{measure}.pickle'
     configure_logging(output_path)
     main(output_path, location, measure)
 
@@ -128,3 +129,21 @@ def configure_logging(output_path):
     if log_file.exists():
         log_file.unlink()
     add_logging_sink(log_file, verbose=2)
+
+
+def sanitize_location(location: str):
+    """Cleans up location formatting for writing and reading from file names.
+
+    Parameters
+    ----------
+    location
+        The unsanitized location name.
+
+    Returns
+    -------
+        The sanitized location name (lower-case with white-space and
+        special characters removed.
+
+    """
+    # FIXME: Should make this a reversible transformation.
+    return location.replace(" ", "_").replace("'", "_").lower()
