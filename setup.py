@@ -41,6 +41,6 @@ if __name__ == "__main__":
 
         entry_points='''
             [console_scripts]
-            make_lbwsg_pickle=lbwsg.cli:get_draws
+            make_lbwsg_pickle=lbwsg.cli:make_lbwsg_pickle
         '''
     )
