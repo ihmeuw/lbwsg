@@ -25,8 +25,7 @@ GBD_MODEL_RESULTS_LOCATION_SET_ID = 35
 def make_lbwsg_pickle(output_dir: str, measure: str, location: str):
     output_path = Path(output_dir).resolve() / f'{location}_{measure}.pickle'
     configure_logging(output_path)
-    main_ = handle_exceptions(main, logger, with_debugger=True)
-    main_(output_path, location, measure)
+    main(output_path, location, measure)
 
 
 def main(path: Path, location: str, measure: str):
@@ -43,7 +42,6 @@ def main(path: Path, location: str, measure: str):
     }
     source = measure_source_map[measure]
     location_id = get_location_id(location)
-    import pdb; pdb.set_trace()
     logger.info(f'Attempting to pull data from {source} for location {location}, id {location_id} '
                 f'using tables version {tables_version}.')
 
@@ -130,25 +128,3 @@ def configure_logging(output_path):
     if log_file.exists():
         log_file.unlink()
     add_logging_sink(log_file, verbose=2)
-
-
-def handle_exceptions(func: Callable, logger_: Any, with_debugger: bool) -> Callable:
-    """Drops a user into an interactive debugger if func raises an error."""
-
-    @functools.wraps(func)
-    def wrapped(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except (BdbQuit, KeyboardInterrupt):
-            raise
-        except Exception as e:
-            logger_.exception("Uncaught exception {}".format(e))
-            if with_debugger:
-                import pdb
-                import traceback
-                traceback.print_exc()
-                pdb.post_mortem()
-            else:
-                raise
-
-    return wrapped
