@@ -26,6 +26,8 @@ def make_lbwsg_pickle(output_dir: str, measure: str, location: str):
     location = location.strip('"')
     sanitized_location = sanitize_location(location)
     output_path = Path(output_dir).resolve() / f'{sanitized_location}_{measure}.pickle'
+    if output_path.exists():
+        return
     configure_logging(output_path)
     main(output_path, location, measure)
 
