@@ -9,22 +9,24 @@ if __name__ == "__main__":
     src_dir = os.path.join(base_dir, "src")
 
     install_requirements = [
-        'vivarium==0.9.3',
-        'vivarium_public_health==0.10.4',
-        'gbd_mapping==2.1.0',
-        'vivarium_gbd_access==2.0.4',
-        'tables>=3.4.0',
-        'pandas<0.25',
         'click',
-        'jinja2',
         'loguru',
-        'scipy',
     ]
 
-    extras_require = [
-        'vivarium_cluster_tools==1.1.1',
-        'vivarium_inputs[data]==3.1.1',
-    ]
+    extras_require = {
+        'tables-old': [
+            'tables==3.4.0',
+            'pandas<0.25',
+            'get_draws',
+            'db_queries',
+        ],
+        'tables-new': [
+            'tables==3.5.2',
+            'pandas>=0.25',
+            'get_draws',
+            'db_queries',
+        ]
+    }
 
     setup(
         name='lbwsg',
@@ -33,14 +35,12 @@ if __name__ == "__main__":
         include_package_data=True,
 
         install_requires=install_requirements,
-        extras_require={
-            'dev': extras_require,
-        },
+        extras_require=extras_require,
 
         zip_safe=False,
 
         entry_points='''
             [console_scripts]
-            get_draws=lbwsg.cli:get_draws
+            make_lbwsg_pickle=lbwsg.cli:get_draws
         '''
     )
