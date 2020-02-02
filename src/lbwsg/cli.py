@@ -16,17 +16,14 @@ GBD_MODEL_RESULTS_LOCATION_SET_ID = 35
 
 
 @click.command()
-@click.option('-o', '--output-path', type=click.Path())
+@click.option('-o', '--output-dir', type=click.Path())
 @click.option('-m', '--measure',
               type=click.Choice(['exposure', 'relative_risk', 'population_attributable_fraction']))
 @click.option('-l', '--location', type=click.STRING)
-def make_lbwsg_pickle(output_path: str, source: str, location: str):
-    output_path = Path(output_path).resolve()
-    log_file = output_path.parent / 'logs' / f'{output_path.stem}.log'
-    if log_file.exists():
-        log_file.unlink()
-    add_logging_sink(log_file, verbose=2)
-    main(output_path, location, source)
+def make_lbwsg_pickle(output_dir: str, measure: str, location: str):
+    output_path = Path(output_dir).resolve() / f'{location}_{measure}.pickle'
+    configure_logging(output_path)
+    main(output_path, location, measure)
 
 
 def main(path: Path, location: str, measure: str):
@@ -120,3 +117,13 @@ def add_logging_sink(sink: TextIO, verbose: int, colorize: bool = False, seriali
         logger.add(sink, colorize=colorize, level="INFO", format=message_format, serialize=serialize)
     elif verbose >= 2:
         logger.add(sink, colorize=colorize, level="DEBUG", format=message_format, serialize=serialize)
+
+
+def configure_logging(output_path):
+    logger.remove(0)  # Clear default configuration
+    add_logging_sink(sys.stdout, verbose=2, colorize=True)
+
+    log_file = output_path.parent / 'logs' / f'{output_path.stem}.log'
+    if log_file.exists():
+        log_file.unlink()
+    add_logging_sink(log_file, verbose=2)
