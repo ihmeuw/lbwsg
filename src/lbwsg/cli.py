@@ -21,7 +21,7 @@ GBD_MODEL_RESULTS_LOCATION_SET_ID = 35
               type=click.Choice(['exposure', 'relative_risk', 'population_attributable_fraction']))
 @click.option('-l', '--location', type=click.String)
 def make_lbwsg_pickle(output_path: str, source: str, location: str):
-    output_path = Path(output_path)
+    output_path = Path(output_path).resolve()
     log_file = output_path.parent / 'logs' / f'{output_path.stem}.log'
     if log_file.exists():
         log_file.unlink()
