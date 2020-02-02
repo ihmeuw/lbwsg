@@ -23,6 +23,7 @@ GBD_MODEL_RESULTS_LOCATION_SET_ID = 35
               type=click.Choice(['exposure', 'relative_risk', 'population_attributable_fraction']))
 @click.option('-l', '--location', type=click.STRING)
 def make_lbwsg_pickle(output_dir: str, measure: str, location: str):
+    location = location.strip('"')
     sanitized_location = sanitize_location(location)
     output_path = Path(output_dir).resolve() / f'{sanitized_location}_{measure}.pickle'
     configure_logging(output_path)
